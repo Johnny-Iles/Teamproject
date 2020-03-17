@@ -3,7 +3,7 @@
 require_once "config.php";
  
 // Define variables and initialize with empty values
-$username = $password = $confirm_password = "";
+$username = $password = $confirm_password = $email = $name = $surname = "";
 $username_err = $password_err = $confirm_password_err = "";
  
 // Processing form data when form is submitted
@@ -60,18 +60,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $confirm_password_err = "Password did not match.";
         }
     }
+
+    //TO DO: Validate this dat below
+    $name = $_POST["name"];
+    $surname = $_POST["surname"];
+    $email = $_POST["email"];
     
     // Check input errors before inserting in database
     if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
         
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        $sql = "INSERT INTO users (Name, Surname, Email_Address, username, password) VALUES (?, ?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
+
+            
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
+            mysqli_stmt_bind_param($stmt, "sssss", $param_name, $param_surname, $param_email, $param_username, $param_password);
             
             // Set parameters
+            $param_name = $name;
+            $param_surname = $surname;
+            $param_email = $email;
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
             
@@ -109,6 +119,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <h2>Sign Up</h2>
         <p>Please fill this form to create an account.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+            <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
+                <label>First Name</label>
+                <input type="text" name="name" class="form-control" value="<?php echo $name; ?>">
+                <span class="help-block"><?php echo $username_err; ?></span>
+            </div>  
+            <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
+                <label>Last Name</label>
+                <input type="text" name="surname" class="form-control" value="<?php echo $surname; ?>">
+                <span class="help-block"><?php echo $username_err; ?></span>
+            </div>  
+            <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
+                <label>Email</label>
+                <input type="text" name="email" class="form-control" value="<?php echo $email; ?>">
+                <span class="help-block"><?php echo $username_err; ?></span>
+            </div>   
             <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                 <label>Username</label>
                 <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
