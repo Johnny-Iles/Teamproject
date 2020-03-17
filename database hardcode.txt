@@ -4,9 +4,6 @@ DROP TABLE User_Addresses;
 DROP TABLE Businesses;
 DROP TABLE Users;
 
-CREATE TABLE Account
-(
-
 CREATE TABLE Businesses
 (Business_ID INTEGER NOT NULL AUTO_INCREMENT,
 password TEXT NOT NULL,
