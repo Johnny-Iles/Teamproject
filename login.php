@@ -2,14 +2,14 @@
 // Initialize the session
 session_start();
  
-// Check if the user is already logged in, if yes then redirect him to welcome page
+// Check if the user is already logged in, if yes then redirect him to index page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-  header("location: welcome.php");
+  header("location: index.php");
   exit;
 }
  
 // Include config file
-require_once "config.php";
+require_once "includes/config.php";
  
 // Define variables and initialize with empty values
 $username = $password = "";
@@ -63,8 +63,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;                            
                             
-                            // Redirect user to welcome page
-                            header("location: welcome.php");
+                            // Redirect user to index page
+                            header("location: index.php");
                         } else{
                             // Display an error message if password is not valid
                             $password_err = "The password you entered was not valid.";
@@ -94,15 +94,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-    <style type="text/css">
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 350px; padding: 20px; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/site.css">
 </head>
 <body>
-    <div class="wrapper">
-        <h2>Login</h2>
-        <p>Please fill in your credentials to login.</p>
+<?php require 'includes/header.php' ?>
+    <div class="form-wrapper">
+        <h2 style="text-align: center;">Login</h2>
+        <p style="text-align: center;">Please fill in your credentials to login.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                 <label>Username</label>
@@ -119,6 +117,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
             <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
         </form>
-    </div>    
+    </div>
+<?php require 'includes/footer.php' ?>    
 </body>
 </html>
